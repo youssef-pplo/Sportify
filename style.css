@@ -131,14 +131,7 @@ h2 {
   padding: 0 5vw;
 }
 
-p {
-  position: absolute;
-  color: #0000002b;
-  bottom: 10vw;
-  right: 10vw;
-  width: 250px;
-  line-height: 1.5;
-}
+
 
 /* Center the content of the <ddd> element */
 ddd {
