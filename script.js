@@ -1,55 +1,37 @@
-gsap.registerPlugin(ScrollTrigger);
-
-const pageContainer = document.querySelector(".container");
-
-/* SMOOTH SCROLL */
-const scroller = new LocomotiveScroll({
-  el: pageContainer,
-  smooth: true
-});
-
-scroller.on("scroll", ScrollTrigger.update);
-
-ScrollTrigger.scrollerProxy(pageContainer, {
-  scrollTop(value) {
-    return arguments.length
-      ? scroller.scrollTo(value, 0, 0)
-      : scroller.scroll.instance.scroll.y;
-  },
-  getBoundingClientRect() {
-    return {
-      left: 0,
-      top: 0,
-      width: window.innerWidth,
-      height: window.innerHeight
-    };
-  },
-  pinType: pageContainer.style.transform ? "transform" : "fixed"
-});
+$('.awesome-tooltip').tooltip({
+            placement: 'left'
+        });  
+        $('body').scrollspy({ 
+            target: '#mainnav', 
+            offset: 000
+        });  
+        $('a[href*=#]:not([href=#])').click(function() {
+            if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+                if (target.length) {                   
+                    $('html, body').animate({
+                        scrollTop: target.offset().top
+                    }, 500);
+                    return false;
+                }
+            }
+        });
 
 
-window.addEventListener("load", function () {
-  let pinBoxes = document.querySelectorAll(".pin-wrap > *");
-  let pinWrap = document.querySelector(".pin-wrap");
-  let pinWrapWidth = pinWrap.offsetWidth;
-  let horizontalScrollLength = pinWrapWidth - window.innerWidth;
+    $(document).ready(function () {
+        $(window).on('scroll', function () {
+            var scrollPos = $(document).scrollTop();
+            $('nav a').each(function () {
+                var currLink = $(this);
+                var refElement = $(currLink.attr("href"));
+                if (refElement.position().top <= scrollPos && refElement.position().top + refElement.height() > scrollPos) {
+                    $('nav ul li').removeClass("active");
+                    currLink.parent().addClass("active");
+                } else {
+                    currLink.parent().removeClass("active");
+                }
+            });
+        });
+    });
 
- 
-  gsap.to(".pin-wrap", {
-    scrollTrigger: {
-      scroller: pageContainer, 
-      scrub: true,
-      trigger: "#sectionPin",
-      pin: true,
-      // anticipatePin: 1,
-      start: "top top",
-      end: pinWrapWidth
-    },
-    x: -horizontalScrollLength,
-    ease: "none"
-  });
-
-  ScrollTrigger.addEventListener("refresh", () => scroller.update()); 
-
-  ScrollTrigger.refresh();
-});
